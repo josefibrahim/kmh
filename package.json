@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "jest",
-    "test:integration": "echo 'Running integration tests .. No integration tests found.'"
+    "test:integration": "echo 'Running integration tests .. No integration tests found. Add integration tests and edit test:integration command in package.json.'"
   },
   "author": "",
   "license": "ISC",

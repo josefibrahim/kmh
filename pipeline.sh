@@ -4,11 +4,11 @@
 [ -d node-modules ] && rm node-modules -rf && echo 'removed node-modules'
 
 #install dependencies in package.json
-echo 'Installing dependencies ..'
+echo -e '\nInstalling dependencies ..'
 npm install || exit 1
 
 #auditing
-echo 'Running audit ..'
+echo -e '\nRunning audit ..'
 npm audit
 
 # check if .eslintrc.js file exists, if not, create it with default configuration
@@ -35,14 +35,14 @@ fi
 #yes | npm init @eslint/config@latest #--config .eslintrc.json --force 
 #npm init @eslint/config@latest -- --config eslint-config-standard
 
-echo 'Running eslint ..'
+echo -e '\nRunning eslint ..'
 #npx eslint .  || exit 1
 
 # delete .eslintrc.js file
 rm .eslintrc.js
 
 #run unit test
-echo 'Running unit tests ..'
+echo -e '\nRunning unit tests ..'
 npm run test || exit 1
 
 #node . || exit 1
@@ -51,7 +51,7 @@ npm run test || exit 1
 echo "node_modules" > .dockerignore
 
 # create Dockerfile
-echo 'Creating Docker File ..'
+echo -e '\nCreating Docker File ..'
 echo "FROM node:22
 
 COPY package.json /usr/src/app/
@@ -71,24 +71,26 @@ CMD [\"npm\", \"run\", \"start\"]
 
 
 # build docker image
+echo -e '\nbuiling container ..'
 docker build -t kmh_image .
 
 # run docker container
+echo -e '\nRunning container ..'
 docker run -d --rm -p 8080:3001 --name kmh_container kmh_image
 
 #integration test
 npm run test:integration
 
-echo 'Enter username for tagging and pushing docker image:'
+echo -e '\nEnter docker username for tagging and pushing docker image:'
 read docker_user
 
 # push docker image
-echo 'Tagging image ..'
+echo -e '\nTagging image ..'
 docker tag kmh_image $docker_user/kmh_image
 
 docker login
 
-echo 'Pushing image ..'
+echo -e '\nPushing image ..'
 docker push $docker_user/kmh_image
 
 # remove Dockerfile and .dockerignore files
