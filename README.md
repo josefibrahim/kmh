@@ -1,3 +1,10 @@
+Steps:
+1. Clone repo
+2. Run ./pipeline.sh
+3. When asked, enter your docker username
+4. Visit localhost:8080 to view running nodejs app
+5. Visit https://hub.docker.com/ to view the pushed docker image
+
 Assumptions:
 1. npm is installed
 2. docker is installed
