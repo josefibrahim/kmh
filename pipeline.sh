@@ -15,28 +15,24 @@ npm audit
 if [ ! -f .eslintrc.js ]; then
     echo 'Creating .eslintrc.js ..'
     echo "module.exports = {
-    env: {
-        es2021: true,
-        node: true,
+  languageOptions: {
+    globals: {
+      es2021: true,
+      node: true,
     },
-    extends: [
-        'eslint:recommended',
-    ],
-    parserOptions: {
-        ecmaVersion: 12,
-        sourceType: 'module',
-    },
-    rules: {
-    },
-};" > .eslintrc.js  || exit 1
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
+  rules: {
+    'indent': ['error', 2],
+    'no-trailing-spaces': 'error',
+  },
+};
+" > .eslintrc.js  || exit 1
 fi
 
-#run eslint
-#yes | npm init @eslint/config@latest #--config .eslintrc.json --force 
-#npm init @eslint/config@latest -- --config eslint-config-standard
-
 echo -e '\nRunning eslint ..'
-#npx eslint .  || exit 1
+npx eslint --config .eslintrc.js . || exit 1
 
 # delete .eslintrc.js file
 rm .eslintrc.js
