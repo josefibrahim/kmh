@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benutzereinstellungen</title>
+</head>
+<body>
+  <h1>Benutzereinstellungen</h1>
+  
+  <!-- Formular zum Festlegen der Benutzereinstellungen -->
+  <h2>Benutzereinstellungen festlegen</h2>
+  <form id="setSettingsForm">
+    <label for="userId">Benutzer-ID:</label><br>
+    <input type="text" id="userId" name="userId" required><br>
+    <label for="language">Sprache:</label><br>
+    <input type="text" id="language" name="language" required><br><br>
+    <button type="submit">Einstellungen festlegen</button>
+  </form>
+
+  <!-- Formular zum Abrufen der Benutzereinstellungen -->
+  <h2>Benutzereinstellungen abrufen</h2>
+  <form id="getSettingsForm">
+    <label for="getUserId">Benutzer-ID:</label><br>
+    <input type="text" id="getUserId" name="userId" required><br><br>
+    <button type="submit">Einstellungen abrufen</button>
+  </form>
+
+  <!-- Anzeige für die festgelegten Benutzereinstellungen -->
+  <div id="userSettings"></div>
+
+  <!-- JavaScript zum Senden von AJAX-Anfragen -->
+  <script>
+    const setSettingsForm = document.getElementById('setSettingsForm');
+    const getSettingsForm = document.getElementById('getSettingsForm');
+    const userSettingsDiv = document.getElementById('userSettings');
+
+    setSettingsForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(setSettingsForm);
+      const userId = formData.get('userId');
+      const language = formData.get('language');
+
+      const response = await fetch('/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, language })
+      });
+
+      const result = await response.text();
+      alert(result); // Benachrichtigung über Erfolg/Misserfolg
+      getUserSettings(userId); // Benutzereinstellungen aktualisieren
+    });
+
+    // Funktion zum Abrufen der Benutzereinstellungen
+    getSettingsForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(getSettingsForm);
+      const userId = formData.get('userId');
+
+      getUserSettings(userId);
+    });
+
+    async function getUserSettings(userId) {
+      const response = await fetch(`/settings/${userId}`);
+      if (!response.ok) {
+        userSettingsDiv.textContent = 'Benutzereinstellungen nicht gefunden';
+        return;
+      }
+      const data = await response.json();
+      userSettingsDiv.textContent = `Benutzer-ID: ${data.userId}, Sprache: ${data.language}`;
+    }
+  </script>
+</body>
+</html>
