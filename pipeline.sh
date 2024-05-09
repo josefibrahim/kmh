@@ -39,7 +39,7 @@ rm .eslintrc.js
 
 #run unit test
 echo -e '\nRunning unit tests ..'
-npm run test || exit 1
+#npm run test || exit 1
 
 #node . || exit 1
 
@@ -57,6 +57,9 @@ WORKDIR /usr/src/app
 RUN npm install
 
 COPY . /usr/src/app
+
+#Run unit tests from the container again to test consistency
+RUN npm run test
 
 ENV PORT 3001
 
